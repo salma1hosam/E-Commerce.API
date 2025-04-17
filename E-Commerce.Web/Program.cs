@@ -41,7 +41,7 @@ namespace E_Commerce.Web
 			await objectOfDataSeeding.DataSeedAsync();
 			#endregion
 
-			#region Configure the HTTP request pipeline.
+			#region Configure the HTTP request pipeline.(Middlewares)
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
@@ -49,6 +49,7 @@ namespace E_Commerce.Web
 			}
 
 			app.UseHttpsRedirection();
+			app.UseStaticFiles();   //Routing to the static files (to wwwroot)
 
 			app.MapControllers();
 			#endregion
