@@ -2,12 +2,15 @@ using DomainLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Data;
+using Persistence.Repositories;
+using Service;
+using ServiceAbstraction;
 
 namespace E_Commerce.Web
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
@@ -25,15 +28,20 @@ namespace E_Commerce.Web
 			});
 
 			builder.Services.AddScoped<IDataSeeding, DataSeeding>();
+			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+			builder.Services.AddAutoMapper(typeof(Service.AssemblyReference).Assembly);
+			builder.Services.AddScoped<IServiceManager, ServiceManager>();
 			#endregion
 
 			var app = builder.Build();
 
+			#region Data Seeding
 			using var scope = app.Services.CreateScope();
 			var objectOfDataSeeding = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
-			objectOfDataSeeding.DataSeed();
+			await objectOfDataSeeding.DataSeedAsync();
+			#endregion
 
-			#region Configure the HTTP request pipeline.
+			#region Configure the HTTP request pipeline.(Middlewares)
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
@@ -41,6 +49,7 @@ namespace E_Commerce.Web
 			}
 
 			app.UseHttpsRedirection();
+			app.UseStaticFiles();   //Routing to the static files (to wwwroot)
 
 			app.MapControllers();
 			#endregion
