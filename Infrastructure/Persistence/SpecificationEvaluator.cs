@@ -39,6 +39,9 @@ namespace Persistence
 
 			}
 
+			if (specifications.IsPaginated)
+				Query = Query.Skip(specifications.Skip).Take(specifications.Take);
+
 			return Query;
 		}
 	}
