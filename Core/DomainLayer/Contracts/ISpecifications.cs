@@ -8,5 +8,7 @@ namespace DomainLayer.Contracts
 		//Property Signature of Each Dynamic Part in the Query (Where Expression & Include Expressions)
 		public Expression<Func<TEntity, bool>>? Criteria { get; } //Where Expression
 		public List<Expression<Func<TEntity, object>>> IncludeExpressions { get; } //Include Expressions
+		public Expression<Func<TEntity, object>> OrderBy { get; } //OrderBy Expression
+		public Expression<Func<TEntity, object>> OrderByDescending { get; } //OrderByDescending Expression
 	}
 }
