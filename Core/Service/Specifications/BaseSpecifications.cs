@@ -7,11 +7,11 @@ namespace Service.Specifications
 	internal abstract class BaseSpecifications<TEntity, TKey> : ISpecifications<TEntity, TKey> where TEntity : BaseEntity<TKey>
 	{
 		//Any class will inherit from BaseSpecifications class must Chain on this constructor so, must pass the Where Expression (will set it through the Constructor)
-		protected BaseSpecifications(Expression<Func<TEntity, bool>> criteriaExpression)
+		protected BaseSpecifications(Expression<Func<TEntity, bool>>? criteriaExpression)
 		{
 			Criteria = criteriaExpression;
 		}
-		public Expression<Func<TEntity, bool>> Criteria { get; private set; }
+		public Expression<Func<TEntity, bool>>? Criteria { get; private set; }
 
 		public List<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = [];
 
