@@ -1,4 +1,5 @@
-﻿using E_Commerce.Web.ErrorModels;
+﻿using DomainLayer.Exceptions;
+using E_Commerce.Web.ErrorModels;
 using System.Net;
 
 namespace E_Commerce.Web.CustomMiddlewares
@@ -28,7 +29,11 @@ namespace E_Commerce.Web.CustomMiddlewares
 				//Set the Status Code of the Response:
 				//httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				//OR
-				httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;  //In the Response
+				httpContext.Response.StatusCode = ex switch
+				{
+					NotFoundException => StatusCodes.Status404NotFound,
+					_ => StatusCodes.Status500InternalServerError
+				};//In the Response
 
 				////Set the Content Type of the Response:
 				//httpContext.Response.ContentType = "application/json";
@@ -36,7 +41,7 @@ namespace E_Commerce.Web.CustomMiddlewares
 				//Response Object:
 				var response = new ErrorToReturn()
 				{
-					StatusCode = StatusCodes.Status500InternalServerError,  //In the Body of the Response
+					StatusCode = httpContext.Response.StatusCode,  //In the Body of the Response
 					ErrorMessage = ex.Message
 				};
 
