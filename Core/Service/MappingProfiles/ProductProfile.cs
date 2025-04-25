@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using DomainLayer.Models;
+using DomainLayer.Models.ProductModule;
 using Shared.DataTransferObjects;
 
 namespace Service.MappingProfiles
 {
-	public class ProductProfile : Profile
+    public class ProductProfile : Profile
 	{
 		public ProductProfile()
 		{

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DomainLayer.Models;
+using DomainLayer.Models.ProductModule;
 using Microsoft.Extensions.Configuration;
 using Shared.DataTransferObjects;
 
 namespace Service.MappingProfiles
 {
-	internal class PictureUrlResolver(IConfiguration _configuration) : IValueResolver<Product, ProductDto, string>
+    internal class PictureUrlResolver(IConfiguration _configuration) : IValueResolver<Product, ProductDto, string>
 	{
 
 		//https://localhost:7277/{src,PictureUrl}

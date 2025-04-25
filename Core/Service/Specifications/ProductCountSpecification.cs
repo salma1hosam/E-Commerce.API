@@ -1,9 +1,9 @@
-﻿using DomainLayer.Models;
+﻿using DomainLayer.Models.ProductModule;
 using Shared;
 
 namespace Service.Specifications
 {
-	internal class ProductCountSpecification : BaseSpecifications<Product, int>
+    internal class ProductCountSpecification : BaseSpecifications<Product, int>
 	{
 		public ProductCountSpecification(ProductQueryParams queryParams)
 			: base(P => (!queryParams.BrandId.HasValue || P.ProductBrand.Id == queryParams.BrandId)

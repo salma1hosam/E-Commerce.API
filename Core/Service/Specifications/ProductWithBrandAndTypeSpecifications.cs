@@ -1,9 +1,9 @@
-﻿using DomainLayer.Models;
+﻿using DomainLayer.Models.ProductModule;
 using Shared;
 
 namespace Service.Specifications
 {
-	internal class ProductWithBrandAndTypeSpecifications : BaseSpecifications<Product, int>
+    internal class ProductWithBrandAndTypeSpecifications : BaseSpecifications<Product, int>
 	{
 		//Get All Products With Brand and Type
 		public ProductWithBrandAndTypeSpecifications(ProductQueryParams queryParams)

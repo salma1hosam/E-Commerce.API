@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DomainLayer.Contracts;
 using DomainLayer.Exceptions;
-using DomainLayer.Models;
+using DomainLayer.Models.ProductModule;
 using Service.Specifications;
 using ServiceAbstraction;
 using Shared;
@@ -9,7 +9,7 @@ using Shared.DataTransferObjects;
 
 namespace Service
 {
-	public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
+    public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
 	{
 		public async Task<IEnumerable<BrandDto>> GetAllBrandsAsync()
 		{

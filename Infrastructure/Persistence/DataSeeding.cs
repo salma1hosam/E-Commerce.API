@@ -1,12 +1,12 @@
 ﻿using DomainLayer.Contracts;
-using DomainLayer.Models;
+using DomainLayer.Models.ProductModule;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using System.Text.Json;
 
 namespace Persistence
 {
-	public class DataSeeding(StoreDbContext _dbContext) : IDataSeeding
+    public class DataSeeding(StoreDbContext _dbContext) : IDataSeeding
 	{
 		public async Task DataSeedAsync()
 		{
