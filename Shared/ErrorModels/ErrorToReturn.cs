@@ -1,4 +1,5 @@
-﻿namespace E_Commerce.Web.ErrorModels
+﻿
+namespace Shared.ErrorModels
 {
 	public class ErrorToReturn
 	{

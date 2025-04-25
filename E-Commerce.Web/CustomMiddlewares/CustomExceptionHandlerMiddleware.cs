@@ -1,5 +1,5 @@
 ﻿using DomainLayer.Exceptions;
-using E_Commerce.Web.ErrorModels;
+using Shared.ErrorModels;
 using System.Net;
 
 namespace E_Commerce.Web.CustomMiddlewares
