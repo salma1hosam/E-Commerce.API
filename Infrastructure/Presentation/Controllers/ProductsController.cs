@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServiceAbstraction;
 using Shared;
-using Shared.DataTransferObjects;
+using Shared.DataTransferObjects.ProductModule;
 
 namespace Presentation.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("api/[Controller]")] // BaseUrl/api/Products
 	public class ProductsController(IServiceManager _serviceManager) : ControllerBase
 	{
