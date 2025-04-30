@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Persistence.Identity;
 using StackExchange.Redis;
 
 namespace Persistence
@@ -23,6 +24,13 @@ namespace Persistence
 			{
 				return ConnectionMultiplexer.Connect(Configuration.GetConnectionString("RedisConnectionString"));
 			});
+
+			//Adding or Registering the Identity DbContext Services
+			Services.AddDbContext<StoreIdentityDbContext>(options =>
+			{
+				options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"));
+			});
+
 			return Services;
 		}
 	}
