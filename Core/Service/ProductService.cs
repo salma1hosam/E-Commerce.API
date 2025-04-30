@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using DomainLayer.Contracts;
-using DomainLayer.Models;
+using DomainLayer.Exceptions;
+using DomainLayer.Models.ProductModule;
 using Service.Specifications;
 using ServiceAbstraction;
 using Shared;
-using Shared.DataTransferObjects;
+using Shared.DataTransferObjects.ProductModule;
 
 namespace Service
 {
-	public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
+    public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
 	{
 		public async Task<IEnumerable<BrandDto>> GetAllBrandsAsync()
 		{
@@ -40,6 +41,8 @@ namespace Service
 		{
 			var specifications = new ProductWithBrandAndTypeSpecifications(id);
 			var product = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(specifications);
+			if (product is null)
+				throw new ProductNotFoundException(id);
 			return _mapper.Map<Product, ProductDto>(product);
 		}
 	}

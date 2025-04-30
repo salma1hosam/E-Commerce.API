@@ -1,10 +1,8 @@
 using DomainLayer.Contracts;
-using Microsoft.EntityFrameworkCore;
+using E_Commerce.Web.CustomMiddlewares;
+using E_Commerce.Web.Extensions;
 using Persistence;
-using Persistence.Data;
-using Persistence.Repositories;
 using Service;
-using ServiceAbstraction;
 
 namespace E_Commerce.Web
 {
@@ -18,35 +16,31 @@ namespace E_Commerce.Web
 
 			builder.Services.AddControllers();
 
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			//Registering all the Swagger Services through this Extension Method
+			builder.Services.AddSwaggerServices();
 
-			builder.Services.AddDbContext<StoreDbContext>(options =>
-			{
-				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-			});
+			//Registering all the Services of the Persistence Layer through this Extension Method
+			builder.Services.AddInfrastructureServices(builder.Configuration);
 
-			builder.Services.AddScoped<IDataSeeding, DataSeeding>();
-			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-			builder.Services.AddAutoMapper(typeof(Service.AssemblyReference).Assembly);
-			builder.Services.AddScoped<IServiceManager, ServiceManager>();
+			//Registering all the Services of the Service Implementation Layer through this Extension Method
+			builder.Services.AddApplicationServices();
+
+			//Registering all the Services related to this layer (WebApplication Layer) through this Extension Method
+			builder.Services.AddWebApplicationServices();
 			#endregion
 
 			var app = builder.Build();
 
-			#region Data Seeding
-			using var scope = app.Services.CreateScope();
-			var objectOfDataSeeding = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
-			await objectOfDataSeeding.DataSeedAsync();
-			#endregion
+			//Seeding Data in Database through this Extension Method for the WebApplication
+			await app.SeedDatabaseAsync();
 
 			#region Configure the HTTP request pipeline.(Middlewares)
+
+			//Exception Middlewares Must be at Beginning of the Middlewares
+			app.UseCustomExceptionMiddleware(); //Adding the Custom Exception Middleware in the container through the IApplicationBuilder(WebApplication Inherit from it) Extention Method
+
 			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
+				app.UseSwaggerMiddlewares();  //Adding Swagger Middlewares through the Extension Method
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();   //Routing to the static files (to wwwroot)

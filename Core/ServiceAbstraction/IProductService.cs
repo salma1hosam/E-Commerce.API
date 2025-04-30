@@ -1,9 +1,9 @@
 ﻿using Shared;
-using Shared.DataTransferObjects;
+using Shared.DataTransferObjects.ProductModule;
 
 namespace ServiceAbstraction
 {
-	public interface IProductService
+    public interface IProductService
 	{
 		//Get All Products
 		Task<PaginatedResult<ProductDto>> GetAllProductsAsync(ProductQueryParams queryParams);
