@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Shared.ErrorModels;
 using System.Net;
 
@@ -35,24 +36,25 @@ namespace E_Commerce.Web.CustomMiddlewares
 			//Response Object:
 			var response = new ErrorToReturn()
 			{
-				StatusCode = httpContext.Response.StatusCode,  //In the Body of the Response
 				ErrorMessage = ex.Message
 			};
 
-			//Set the Status Code of the Response:
-			//httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-			//OR
-			httpContext.Response.StatusCode = ex switch
+			response.StatusCode = ex switch
 			{
 				NotFoundException => StatusCodes.Status404NotFound,
 				UnauthorizedException => StatusCodes.Status401Unauthorized,
 				BadRequestException badRequestException => GetBadRequestErrors(badRequestException, response),
 				_ => StatusCodes.Status500InternalServerError
-			};//In the Response
+			};//In the Body of the Response
+
+
+			//Set the Status Code of the Response:
+			//httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+			//OR
+			httpContext.Response.StatusCode = response.StatusCode; //In the Response Context
 
 			////Set the Content Type of the Response:
 			//httpContext.Response.ContentType = "application/json";
-
 
 			//Return the Response Object as JSON:
 			await httpContext.Response.WriteAsJsonAsync(response); //Will Serilize the object to JSON and return it

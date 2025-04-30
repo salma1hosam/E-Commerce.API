@@ -5,9 +5,7 @@ using Shared.DataTransferObjects.ProductModule;
 
 namespace Presentation.Controllers
 {
-    [ApiController]
-	[Route("api/[Controller]")] // BaseUrl/api/Products
-	public class ProductsController(IServiceManager _serviceManager) : ControllerBase
+	public class ProductsController(IServiceManager _serviceManager) : ApiBaseController
 	{
 		//Get All Products
 		[HttpGet] //GET BaseUrl/api/Products
