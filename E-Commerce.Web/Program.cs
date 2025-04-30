@@ -1,5 +1,3 @@
-using DomainLayer.Contracts;
-using E_Commerce.Web.CustomMiddlewares;
 using E_Commerce.Web.Extensions;
 using Persistence;
 using Service;
