@@ -1,5 +1,9 @@
 ﻿using E_Commerce.Web.Factories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace E_Commerce.Web.Extensions
 {
@@ -20,6 +24,33 @@ namespace E_Commerce.Web.Extensions
 			Services.Configure<ApiBehaviorOptions>(options =>
 			{
 				options.InvalidModelStateResponseFactory = ApiResponseFactory.GenerateApiValidationErrorsResponse;  //Passing the Function itself (its address) as a delegate [Not calling the function]
+			});
+			return Services;
+		}
+
+		public static IServiceCollection AddJWTServices(this IServiceCollection Services, IConfiguration Configuration)
+		{
+			Services.AddAuthentication(config =>
+			{
+				config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  //The Schema that will be compared to when retrieving
+			}).AddJwtBearer(options =>
+			{
+				////Save the JWT Token in the http context
+				//options.SaveToken = true;
+
+				options.TokenValidationParameters = new TokenValidationParameters()
+				{
+					ValidateIssuer = true,
+					ValidIssuer = Configuration["JWTOptions:Issuer"],
+
+					ValidateAudience = true,
+					ValidAudience = Configuration["JWTOptions:Audience"],
+					
+					ValidateLifetime = true,
+
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTOptions:SecretKey"]))
+				};
 			});
 			return Services;
 		}

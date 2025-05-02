@@ -84,7 +84,7 @@ namespace Service
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
 			//Credintials => Security Key & Algorithm
-			var credintials = new SigningCredentials(key, SecurityAlgorithms.Aes128CbcHmacSha256);
+			var credintials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
 			//Create the JWT Token
 			var token = new JwtSecurityToken(issuer: _configuration["JWTOptions:Issuer"],
