@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ServiceAbstraction;
 using Shared;
 using Shared.DataTransferObjects.ProductModule;
 
 namespace Presentation.Controllers
 {
-    [ApiController]
-	[Route("api/[Controller]")] // BaseUrl/api/Products
-	public class ProductsController(IServiceManager _serviceManager) : ControllerBase
+	public class ProductsController(IServiceManager _serviceManager) : ApiBaseController
 	{
 		//Get All Products
+		[Authorize(Roles = "Admin")]
 		[HttpGet] //GET BaseUrl/api/Products
 		public async Task<ActionResult<PaginatedResult<ProductDto>>> GetAllProducts([FromQuery] ProductQueryParams queryParams)
 		{

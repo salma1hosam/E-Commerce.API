@@ -1,5 +1,3 @@
-using DomainLayer.Contracts;
-using E_Commerce.Web.CustomMiddlewares;
 using E_Commerce.Web.Extensions;
 using Persistence;
 using Service;
@@ -27,6 +25,9 @@ namespace E_Commerce.Web
 
 			//Registering all the Services related to this layer (WebApplication Layer) through this Extension Method
 			builder.Services.AddWebApplicationServices();
+
+			//Registering the JWT Services
+			builder.Services.AddJWTServices(builder.Configuration);
 			#endregion
 
 			var app = builder.Build();
@@ -44,6 +45,11 @@ namespace E_Commerce.Web
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();   //Routing to the static files (to wwwroot)
+
+
+			app.UseRouting();
+			app.UseAuthentication();
+			app.UseAuthorization();
 
 			app.MapControllers();
 			#endregion

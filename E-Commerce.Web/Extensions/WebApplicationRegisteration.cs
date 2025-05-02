@@ -9,7 +9,9 @@ namespace E_Commerce.Web.Extensions
 		{
 			using var scope = app.Services.CreateScope();
 			var objectOfDataSeeding = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
+
 			await objectOfDataSeeding.DataSeedAsync();
+			await objectOfDataSeeding.IdentityDataSeedAsync();
 		}
 
 		//Adding the Middlewares (all the related middlewares in a method) through the Extension Methods
