@@ -65,7 +65,7 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<decimal>("SubTotal")

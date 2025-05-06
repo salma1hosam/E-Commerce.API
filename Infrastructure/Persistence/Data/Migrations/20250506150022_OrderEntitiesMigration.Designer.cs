@@ -12,7 +12,7 @@ using Persistence.Data;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20250506142049_OrderEntitiesMigration")]
+    [Migration("20250506150022_OrderEntitiesMigration")]
     partial class OrderEntitiesMigration
     {
         /// <inheritdoc />
@@ -68,7 +68,7 @@ namespace Persistence.Data.Migrations
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<decimal>("SubTotal")
