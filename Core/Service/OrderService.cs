@@ -3,13 +3,14 @@ using DomainLayer.Contracts;
 using DomainLayer.Exceptions;
 using DomainLayer.Models.OrderModule;
 using DomainLayer.Models.ProductModule;
+using Service.Specifications.OrderModuleSpecifications;
 using ServiceAbstraction;
 using Shared.DataTransferObjects.IdentityModule;
 using Shared.DataTransferObjects.OrderModule;
 
 namespace Service
 {
-	public class OrderService(IUnitOfWork _unitOfWork , IMapper _mapper , IBasketRepository _basketRepository) : IOrderService
+	public class OrderService(IUnitOfWork _unitOfWork, IMapper _mapper, IBasketRepository _basketRepository) : IOrderService
 	{
 		public async Task<OrderToReturnDto> CreateOrderAsync(OrderDto orderDto, string email)
 		{
@@ -55,6 +56,25 @@ namespace Service
 			if (rows < 1) throw new Exception("Order Is Not Created");
 
 			//Map From Order => OrderToReturnDto
+			return _mapper.Map<Order, OrderToReturnDto>(order);
+		}
+
+		public async Task<IEnumerable<OrderToReturnDto>> GetAllOrdersAsync(string email)
+		{
+			var orders = await _unitOfWork.GetRepository<Order, Guid>().GetAllAsync(new OrderSpecification(email));
+			return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderToReturnDto>>(orders);
+		}
+
+		public async Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodsAsync()
+		{
+			var deliveryMethods = await _unitOfWork.GetRepository<DeliveryMethod, int>().GetAllAsync();
+			return _mapper.Map<IEnumerable<DeliveryMethod>, IEnumerable<DeliveryMethodDto>>(deliveryMethods);
+		}
+
+		public async Task<OrderToReturnDto> GetOrderByIdAsync(Guid id)
+		{
+			var order = await _unitOfWork.GetRepository<Order, Guid>().GetByIdAsync(new OrderSpecification(id))
+				?? throw new OrderNotFoundException(id);
 			return _mapper.Map<Order, OrderToReturnDto>(order);
 		}
 	}
