@@ -6,7 +6,8 @@ using System.Text.Json;
 
 namespace Persistence
 {
-	public class DataSeeding(StoreDbContext _dbContext, UserManager<ApplicationUser> _userManager,
+	public class DataSeeding(StoreDbContext _dbContext,
+							 UserManager<ApplicationUser> _userManager,
 							 RoleManager<IdentityRole> _roleManager,
 							 StoreIdentityDbContext _identityDbContext) : IDataSeeding
 	{
@@ -45,6 +46,14 @@ namespace Persistence
 					var products = await JsonSerializer.DeserializeAsync<List<Product>>(productData);
 					if (products is not null && products.Any())
 						await _dbContext.Products.AddRangeAsync(products);
+				}
+
+				if (!_dbContext.Set<DeliveryMethod>().Any())
+				{
+					var deliveryMethodData = File.OpenRead(@"..\Infrastructure\Persistence\Data\DataSeed\delivery.json");
+					var deliveryMethods = await JsonSerializer.DeserializeAsync<List<DeliveryMethod>>(deliveryMethodData);
+					if (deliveryMethods is not null && deliveryMethods.Any())
+						await _dbContext.Set<DeliveryMethod>().AddRangeAsync(deliveryMethods);
 				}
 
 				await _dbContext.SaveChangesAsync();

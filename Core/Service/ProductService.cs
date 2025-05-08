@@ -3,6 +3,7 @@ using DomainLayer.Contracts;
 using DomainLayer.Exceptions;
 using DomainLayer.Models.ProductModule;
 using Service.Specifications;
+using Service.Specifications.ProductModuleSpecifications;
 using ServiceAbstraction;
 using Shared;
 using Shared.DataTransferObjects.ProductModule;
