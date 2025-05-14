@@ -9,7 +9,7 @@ namespace Presentation.Controllers
 	public class ProductsController(IServiceManager _serviceManager) : ApiBaseController
 	{
 		//Get All Products
-		[Authorize(Roles = "Admin")]
+		//[Authorize(Roles = "Admin")]
 		[HttpGet] //GET BaseUrl/api/Products
 		public async Task<ActionResult<PaginatedResult<ProductDto>>> GetAllProducts([FromQuery] ProductQueryParams queryParams)
 		{
