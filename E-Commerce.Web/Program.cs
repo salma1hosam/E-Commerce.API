@@ -46,7 +46,6 @@ namespace E_Commerce.Web
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();   //Routing to the static files (to wwwroot)
 
-
 			app.UseRouting();
 			app.UseAuthentication();
 			app.UseAuthorization();
