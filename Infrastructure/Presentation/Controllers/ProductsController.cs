@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Attributes;
 using ServiceAbstraction;
 using Shared;
 using Shared.DataTransferObjects.ProductModule;
@@ -8,16 +9,16 @@ namespace Presentation.Controllers
 {
 	public class ProductsController(IServiceManager _serviceManager) : ApiBaseController
 	{
-		//Get All Products
 		//[Authorize(Roles = "Admin")]
 		[HttpGet] //GET BaseUrl/api/Products
+		[Cache]
+		//[ResponseCache]  //Can Be Used For Cacheing too
 		public async Task<ActionResult<PaginatedResult<ProductDto>>> GetAllProducts([FromQuery] ProductQueryParams queryParams)
 		{
 			var products = await _serviceManager.ProductService.GetAllProductsAsync(queryParams);
 			return Ok(products);
 		}
 
-		//Get Product By Id
 		[HttpGet("{id:int}")] //GET BaseUrl/api/Products/10
 		public async Task<ActionResult<ProductDto>> GetProduct(int id)
 		{
@@ -25,7 +26,7 @@ namespace Presentation.Controllers
 			return Ok(product);
 		}
 
-		//Get All Types
+		[Cache]
 		[HttpGet("types")] //GET BaseUrl/api/Products/types
 		public async Task<ActionResult<IEnumerable<TypeDto>>> GetTypes()
 		{
@@ -33,7 +34,7 @@ namespace Presentation.Controllers
 			return Ok(types);
 		}
 
-		//Get All Brands
+		[Cache]
 		[HttpGet("brands")] //GET BaseUrl/api/Products/brands
 		public async Task<ActionResult<IEnumerable<BrandDto>>> GetBrands()
 		{
