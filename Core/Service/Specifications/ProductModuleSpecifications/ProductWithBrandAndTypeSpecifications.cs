@@ -9,12 +9,12 @@ namespace Service.Specifications.ProductModuleSpecifications
         public ProductWithBrandAndTypeSpecifications(ProductQueryParams queryParams)
               : base(P => (!queryParams.BrandId.HasValue || P.ProductBrand.Id == queryParams.BrandId)
                      && (!queryParams.TypeId.HasValue || P.ProductType.Id == queryParams.TypeId) //Where(P => P.ProductBrand.Id == brandId && P.ProductType.Id == typeId)
-                     && (string.IsNullOrWhiteSpace(queryParams.SearchValue) || P.Name.ToLower().Contains(queryParams.SearchValue.ToLower())))
+                     && (string.IsNullOrWhiteSpace(queryParams.Search) || P.Name.ToLower().Contains(queryParams.Search.ToLower())))
         {
             AddInclude(P => P.ProductBrand);
             AddInclude(P => P.ProductType);
 
-            switch (queryParams.SortingOption)
+            switch (queryParams.Sort)
             {
                 case ProductSortingOptions.NameAsc:
                     AddOrderBy(P => P.Name);
@@ -32,7 +32,7 @@ namespace Service.Specifications.ProductModuleSpecifications
                     break;
             }
 
-            ApplyPagination(queryParams.PageSize, queryParams.PageIndex);
+            ApplyPagination(queryParams.PageSize, queryParams.PageNumber);
         }
 
         //Get Product By Id With Brand and Type

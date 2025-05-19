@@ -14,6 +14,14 @@ namespace E_Commerce.Web
 
 			builder.Services.AddControllers();
 
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowAll", policy =>
+				{
+					policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+				});
+			});
+
 			//Registering all the Swagger Services through this Extension Method
 			builder.Services.AddSwaggerServices();
 
@@ -46,7 +54,8 @@ namespace E_Commerce.Web
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();   //Routing to the static files (to wwwroot)
 
-			app.UseRouting();
+			app.UseCors("AllowAll");
+			//app.UseRouting();
 			app.UseAuthentication();
 			app.UseAuthorization();
 

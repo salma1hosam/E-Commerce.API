@@ -10,20 +10,20 @@ namespace DomainLayer.Models.OrderModule
 		}
 		public Order(string userEmail, OrderAddress address, DeliveryMethod deliveryMethod, ICollection<OrderItem> items, decimal subTotal)
 		{
-			UserEmail = userEmail;
-			Address = address;
+			BuyerEmail = userEmail;
+			ShipToAddress = address;
 			DeliveryMethod = deliveryMethod;
 			Items = items;
 			SubTotal = subTotal;
 		}
 
-		public string UserEmail { get; set; } = default!;
-		public OrderAddress Address { get; set; } = default!;
+		public string BuyerEmail { get; set; } = default!;
+		public OrderAddress ShipToAddress { get; set; } = default!;
 		public DeliveryMethod DeliveryMethod { get; set; } = default!;
 		public ICollection<OrderItem> Items { get; set; } = []; //Empty List
 		public decimal SubTotal { get; set; }
 		public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
-		public OrderStatus OrderStatus { get; set; }
+		public OrderStatus Status { get; set; }
 		public int DeliveryMethodId { get; set; } //FK
 
 		//[NotMapped]
