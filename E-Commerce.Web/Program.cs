@@ -1,34 +1,66 @@
+using E_Commerce.Web.Extensions;
+using Persistence;
+using Service;
 
 namespace E_Commerce.Web
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
+			#region Add services to the container.
 
 			builder.Services.AddControllers();
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowAll", policy =>
+				{
+					policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+				});
+			});
+
+			//Registering all the Swagger Services through this Extension Method
+			builder.Services.AddSwaggerServices();
+
+			//Registering all the Services of the Persistence Layer through this Extension Method
+			builder.Services.AddInfrastructureServices(builder.Configuration);
+
+			//Registering all the Services of the Service Implementation Layer through this Extension Method
+			builder.Services.AddApplicationServices();
+
+			//Registering all the Services related to this layer (WebApplication Layer) through this Extension Method
+			builder.Services.AddWebApplicationServices();
+
+			//Registering the JWT Services
+			builder.Services.AddJWTServices(builder.Configuration);
+			#endregion
 
 			var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
+			//Seeding Data in Database through this Extension Method for the WebApplication
+			await app.SeedDatabaseAsync();
+
+			#region Configure the HTTP request pipeline.(Middlewares)
+
+			//Exception Middlewares Must be at Beginning of the Middlewares
+			app.UseCustomExceptionMiddleware(); //Adding the Custom Exception Middleware in the container through the IApplicationBuilder(WebApplication Inherit from it) Extention Method
+
 			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
+				app.UseSwaggerMiddlewares();  //Adding Swagger Middlewares through the Extension Method
 
 			app.UseHttpsRedirection();
+			app.UseStaticFiles();   //Routing to the static files (to wwwroot)
 
+			app.UseCors("AllowAll");
+			//app.UseRouting();
+			app.UseAuthentication();
 			app.UseAuthorization();
 
-
 			app.MapControllers();
+			#endregion
 
 			app.Run();
 		}
