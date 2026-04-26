@@ -3,9 +3,11 @@ using DomainLayer.Contracts;
 using DomainLayer.Exceptions;
 using DomainLayer.Models.OrderModule;
 using Microsoft.Extensions.Configuration;
+using Service.Specifications.OrderModuleSpecifications;
 using ServiceAbstraction;
 using Shared.DataTransferObjects.BasketModule;
 using Stripe;
+using Order = DomainLayer.Models.OrderModule.Order;
 using Product = DomainLayer.Models.ProductModule.Product;
 
 namespace Service
@@ -66,6 +68,25 @@ namespace Service
             await _basketRepository.CreateOrUpdateBasketAsync(basket);
 
             return _mapper.Map<BasketDto>(basket);
+        }
+
+        public async Task<string?> UpdateOrderStatusAsync(string paymentIntentId, bool isPaied)
+        {
+            var orderRepo = _unitOfWork.GetRepository<Order, Guid>();
+            var order = await orderRepo.GetByIdAsync(new OrderWithPaymentIntentIdSpecifications(paymentIntentId));
+
+            if (order is null) return null;
+
+            if (isPaied)
+                order.Status = OrderStatus.PaymentReceived;
+            else
+                order.Status = OrderStatus.PaymentFailed;
+
+            orderRepo.Update(order);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return order.PaymentIntentId;
         }
     }
 }
