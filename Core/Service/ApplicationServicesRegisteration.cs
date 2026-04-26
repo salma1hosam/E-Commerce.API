@@ -3,33 +3,37 @@ using ServiceAbstraction;
 
 namespace Service
 {
-	public static class ApplicationServicesRegisteration
-	{
-		//Extension Method To Add all the Service Layer Services to the Services Container through it
-		public static IServiceCollection AddApplicationServices(this IServiceCollection Services)
-		{
-			Services.AddAutoMapper(typeof(Service.AssemblyReference).Assembly);
-			Services.AddScoped<IServiceManager, ServiceManagerWithFactoryDelegate>();
+    public static class ApplicationServicesRegisteration
+    {
+        //Extension Method To Add all the Service Layer Services to the Services Container through it
+        public static IServiceCollection AddApplicationServices(this IServiceCollection Services)
+        {
+            Services.AddAutoMapper(x => { }, typeof(Service.AssemblyReference).Assembly);
+            Services.AddScoped<IServiceManager, ServiceManagerWithFactoryDelegate>();
 
-			Services.AddScoped<IProductService, ProductService>();
-			Services.AddScoped<Func<IProductService>>(provider =>
-													  () => provider.GetRequiredService<IProductService>());
+            Services.AddScoped<IProductService, ProductService>();
+            Services.AddScoped<Func<IProductService>>(provider =>
+                                                      () => provider.GetRequiredService<IProductService>());
 
-			Services.AddScoped<IBasketService, BasketService>();
-			Services.AddScoped<Func<IBasketService>>(provider =>
-													 () => provider.GetRequiredService<IBasketService>());
+            Services.AddScoped<IBasketService, BasketService>();
+            Services.AddScoped<Func<IBasketService>>(provider =>
+                                                     () => provider.GetRequiredService<IBasketService>());
 
-			Services.AddScoped<IAuthenticationService, AuthenticationService>();
-			Services.AddScoped<Func<IAuthenticationService>>(provider =>
-															 () => provider.GetRequiredService<IAuthenticationService>());
+            Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            Services.AddScoped<Func<IAuthenticationService>>(provider =>
+                                                             () => provider.GetRequiredService<IAuthenticationService>());
 
-			Services.AddScoped<IOrderService, OrderService>();
-			Services.AddScoped<Func<IOrderService>>(provider =>
-													() => provider.GetRequiredService<IOrderService>());
+            Services.AddScoped<IOrderService, OrderService>();
+            Services.AddScoped<Func<IOrderService>>(provider =>
+                                                    () => provider.GetRequiredService<IOrderService>());
 
-			Services.AddScoped<ICacheService, CacheService>();
+            Services.AddScoped<ICacheService, CacheService>();
 
-			return Services;
-		}
-	}
+            Services.AddScoped<IPaymentService, PaymentService>();
+            Services.AddScoped<Func<IPaymentService>>(provider =>
+                                                    () => provider.GetRequiredService<IPaymentService>());
+
+            return Services;
+        }
+    }
 }
