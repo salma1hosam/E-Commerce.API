@@ -6,5 +6,9 @@ namespace DomainLayer.Models.BasketModule
 	{
 		public string Id { get; set; } //GUID : Created From the Client [Front-end]
 		public ICollection<BasketItem> Items { get; set; } = [];
-	}
+        public string? ClientSecret { get; set; }
+        public string? PaymentIntentId { get; set; }
+        public int? DeliveryMethodId { get; set; }
+        public decimal? ShippingPrice { get; set; }
+    }
 }
